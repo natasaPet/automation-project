@@ -1,0 +1,193 @@
+{
+	"info": {
+		"_postman_id": "5dafab7f-8cda-47b3-8a9d-5bfde8ae8451",
+		"name": "Postman_echo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9660599"
+	},
+	"item": [
+		{
+			"name": "Get first and last name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate status 200 ",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"//Validate if response contains correct values",
+							"pm.test(\"Response contains correct first and last name in args\", function () {",
+							"    pm.expect(pm.response.json().args.firstname).to.eql(pm.variables.get(\"firstname\"));",
+							"    pm.expect(pm.response.json().args.lastname).to.eql(pm.variables.get(\"lastname\"));",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/get?firstname={{firstname}}&lastname={{lastname}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"get"
+					],
+					"query": [
+						{
+							"key": "firstname",
+							"value": "{{firstname}}"
+						},
+						{
+							"key": "lastname",
+							"value": "{{lastname}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post first and last name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate status 200",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate if response contains correct values",
+							"pm.test(\"Response contains correct user details\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    var firstname = pm.environment.get(\"firstname\");",
+							"    var lastname = pm.environment.get(\"lastname\");",
+							"",
+							"    pm.expect(jsonData.json.firstname).to.eql(firstname);",
+							"    pm.expect(jsonData.json.lastname).to.eql(lastname);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"firstname\": \"Natasha\",\n  \"lastname\": \"Petrushevska\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/post",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"post"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Basic authorization",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"// Validate status 200 ",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate if response contains appropriate messages",
+							"pm.test(\"Response should indicate valid authentication\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property('authenticated', true);",
+							"});",
+							"",
+							"// Extract the password from the Authorization header ",
+							"let encodedString = \"cG9zdG1hbjpwYXNzd29yZA==\";",
+							"let decodedString = atob(encodedString);",
+							"console.log(\"Decoded String:\", decodedString);",
+							"// result is password"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "Basic cG9zdG1hbjpwYXNzd29yZA==",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "https://postman-echo.com/basic-auth",
+					"protocol": "https",
+					"host": [
+						"postman-echo",
+						"com"
+					],
+					"path": [
+						"basic-auth"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
